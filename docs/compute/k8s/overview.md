@@ -104,6 +104,6 @@ Enforce Zero Trust principles for `kubectl` access using Buzz's Access Proxy wit
 
 ### Latest GPUs
 
-Support for state-of-the-art GPU models such as H100, A100, and more from NVIDIA, AMD, and Intel.
+Support for state-of-the-art GPU models such as H100, H200, A100, and B200s.
 
 ---
