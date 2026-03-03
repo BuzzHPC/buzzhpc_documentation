@@ -147,6 +147,20 @@ nav:
     - Managed Kubernetes:
       - 'Overview': 'compute/k8s/overview.md'
       - 'Configure & Use': 'compute/k8s/config_k8s.md'
+  - Services:
+    - LLM Inference:
+      - 'Overview': 'services/llm-inference/overview.md'
+      - 'Configure & Use': 'services/llm-inference/config_llm_inference.md'
+    - Shared File System:
+      - 'Overview': 'services/shared-file-system/overview.md'
+      - 'Configure & Use': 'services/shared-file-system/config_shared_file_system.md'
+    - Object Storage:
+      - 'Overview': 'services/object-storage/overview.md'
+      - 'Configure & Use': 'services/object-storage/config_object_storage.md'
   - AI/ML Apps:
     - 'Notebooks': 'apps/notebook/config_nb.md'
+  - Billing & Usage: billing/usage.md
+  - Administration:
+    - 'Overview': 'administration/overview.md'
+    - 'Audit Trail': 'administration/audit_trail.md'
   - Users:  access_control.md
