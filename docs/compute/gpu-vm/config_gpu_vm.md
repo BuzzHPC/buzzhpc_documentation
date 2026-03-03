@@ -167,8 +167,6 @@ With SSH key:
 ssh -i ~/.ssh/your_private_key ubuntu@<public-ip>
 ```
 
-![Stats Panel](img/gpu-vm/gpu_vm_stats.png)
-
 ---
 
 ## Re-publish GPU VM

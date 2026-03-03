@@ -74,8 +74,6 @@ Select the workspace for the instance.
 **Juniper Firewall Details**
 - **VSRX Mode** - Enable vSRX virtual firewall. Default: `False`.
 
-![Firewall Vendor Settings](img/baremetal/create_baremetal_firewall_vendors.png)
-
 ---
 
 ### Workflow
@@ -83,8 +81,6 @@ Select the workspace for the instance.
 | Field | Description |
 |-------|-------------|
 | **Workflow Type** | Provisioning workflow. Default: `deploy_vm`. |
-
-![Workflow](img/baremetal/create_baremetal_workflow.png)
 
 Click **Create** to provision the instance.
 
@@ -111,8 +107,6 @@ Click on an instance name to view details: Name, Workspace, Compute Profile, Com
 The **Specification** panel shows the current configuration including GPU Type, TAN status, SSH key, user_data, firewall settings, and workflow type.
 
 The **Stats** panel shows connection information after successful provisioning.
-
-![Specification and Stats](img/baremetal/baremetal_specification.png)
 
 ---
 
