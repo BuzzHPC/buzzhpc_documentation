@@ -134,13 +134,22 @@ markdown_extensions:
 # Page tree
 nav:
   - Buzz HPC Cloud Platform: index.md
-  - Workspaces: workspace.md 
-  - Compute: 
-    - Serverless Pods: 
+  - Workspaces: workspace.md
+  - Compute:
+    - DevPods:
+      - 'Overview': 'compute/devpods/overview.md'
+      - 'Configure & Use': 'compute/devpods/config_devpods.md'
+    - GPU Virtual Machines:
+      - 'Overview': 'compute/gpu-vm/overview.md'
+      - 'Configure & Use': 'compute/gpu-vm/config_gpu_vm.md'
+    - Baremetal:
+      - 'Overview': 'compute/baremetal/overview.md'
+      - 'Configure & Use': 'compute/baremetal/config_baremetal.md'
+    - Serverless Pods:
       - 'Configure & Use': 'compute/pods/config_pods.md'
-    - Managed Kubernetes: 
+    - Managed Kubernetes:
       - 'Overview': 'compute/k8s/overview.md'
       - 'Configure & Use': 'compute/k8s/config_k8s.md'
-  - AI/ML Apps: 
+  - AI/ML Apps:
     - 'Notebooks': 'apps/notebook/config_nb.md'
   - Users:  access_control.md
