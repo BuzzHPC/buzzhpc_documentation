@@ -1,172 +1,103 @@
 ---
-title: DevPods User Guide
-description: Step-by-step guide for creating and using DevPods on Buzz HPC.
+title: DevPods
+description: Secure and scalable computing capacity for hosting, testing and prototyping your projects
 tags:
   - DevPods
+  - Pods
   - Self Service
 ---
 
-Users can configure, deploy, and remotely access GPU-enabled developer pods.
+Users can use DevPods to deploy custom containers from prebuilt templates in isolated environments enabling them to efficiently run CPU and GPU-intensive tasks without managing physical infrastructure.
 
 ---
 
-## Create DevPod
+## Create Pod
 
-Navigate to **Compute > DevPods** in the left menu, then click **+ Create**.
+To create a new Pod, select the option for Pods
 
-![DevPods List](img/devpods/view_devpods.png)
+![Create Pod](img/devpods/create_pod.png)
 
----
+--- 
 
-## Select Compute Profile
+## Configure Pod
 
-Choose a compute profile. Two profile types are available:
+Users need to provide a **name** for the pod and select the **workspace** they would like to deploy the pod into. 
 
-- **Serverless** profiles - On-demand GPU access (e.g., Serverless Developer Pods - CA-QC-2)
-- **Dedicated** profiles - Reserved GPU capacity (e.g., Serverless Developer Pods - CA-QC-1, Dedicated)
+![Pod Details](img/devpods/new_pod.png)
 
-Then select the workspace for the DevPod.
+--- 
 
-![Select Profile](img/devpods/create_devpod_profile.png)
+### Resources 
 
----
+Users can specify CPU, Memory, Number of GPUs and model of GPU they would like use with their pod.
 
-## Configure DevPod
+![Pod Resources](img/devpods/new_pod_resources.png)
 
-### Basic Configuration
+Users can select the GPU Model they would like to use from the dropdown. 
 
-- **DevPod Name** *(required)* - Enter a unique name (e.g., `my-devpod-1`)
-- **Description** *(optional)* - Add a description
+![GPU Model](img/devpods/pod_gpu_model.png)
 
-![Basic Configuration](img/devpods/create_devpod_basic.png)
+--- 
 
----
+### Select Pod Image
 
-### Container Configuration
+Pods can come **pre-installed** with frameworks and libraries. This allows the data scientist to start using the Pod right away instead of wasting time trying to install and configure all the software on top and struggling with versioning etc. 
 
-Select the **Pod Image** for the DevPod environment. Available options:
-- **Ubuntu 24-04** (default) - Ubuntu 24.04 LTS with GPU drivers
+![Select Pod Image](img/devpods/pod_image_select.png)
 
-![Container Configuration](img/devpods/create_devpod_container.png)
+Users can select from the list of available Pod Images displayed in the dropdown. 
 
----
-
-### SSH Access
-
-- **Autogenerate SSH Key** - Set to **Yes** (default) for auto-generated SSH key pair, or **No** to use your own key.
-- **Public Key** - Paste your SSH public key if not auto-generating.
-
-![SSH Access](img/devpods/create_devpod_ssh.png)
+![Pod Images](img/devpods/pod_images.png)
 
 ---
 
-### Pod Resources
+### Cost Estimate 
 
-| Field | Description |
-|-------|-------------|
-| **GPU Type** | NVIDIA GPU model (H200, NVIDIA A40, NVIDIA H100 - depends on profile) |
-| **GPU Count** | Number of GPUs |
-| **CPU** | CPU in millicores. Default: 1000m |
-| **Memory** | Memory in MiB. Default: 1024 MiB |
+Users are provided with a real time cost estimate based on the selected configurations. 
 
-![Pod Resources](img/devpods/create_devpod_resources.png)
-
----
-
-### Billing Information
-
-After selecting GPU type and count, billing information and quota limits are displayed.
+![Pod Cost Estimate](img/devpods/pod_cost_estimate.png)
 
 !!! info
-    DevPods are metered by the hour.
+    Pods are metered by the hour with a minimum usage of 1 hour. 
 
-![Billing Information](img/devpods/create_devpod_billing.png)
+--- 
 
-Click **Create** to provision the DevPod.
+## View Pods
 
----
+Users can have multiple pods at any given time. By selecting the Pods menu on the left, they can view the list of all pods across all their workspaces. 
 
-## View DevPods
+![View Pod](img/devpods/view_pods.png)
 
-All DevPods are listed under **Compute > DevPods**:
-
-| Column | Description |
-|--------|-------------|
-| **Name** | DevPod identifier |
-| **Workspace** | Associated workspace |
-| **Profile** | Compute profile used |
-| **Status** | Success, Pending, Failed, or Cancelled |
-| **Created At** | Creation time |
-| **Actions** | Edit or Delete |
-
-![View DevPods](img/devpods/view_devpods.png)
 
 ---
 
-## DevPod Detail View
+## Use/Access Pod
 
-Click on a DevPod name to see its details including Name, Workspace, Compute Profile, Compute Type, Status, Reason, and Action.
+In order to access a pod, click on its name and you will be presented with a view like the example below. Users can access the Pods from their laptops using SSH. 
 
-![DevPod Detail](img/devpods/devpod_detail.png)
+![Access Pod](img/devpods/access_pod.png)
 
----
+--- 
 
-## Specification Panel
+### Download SSH Credentials 
 
-Shows the resource configuration:
+Copy the first command and paste it on your terminal. This will automatically create a new file with details of the private key and update the file permissions for use with SSH. 
 
-| Field | Description |
-|-------|-------------|
-| **GPU Type** | GPU model allocated (e.g., A40) |
-| **GPU Count** | Number of GPUs |
-| **Pod Image** | Container image (e.g., ubuntu-24-04-ssh-pod:v1) |
-| **Autogenerate SSH Key** | true or false |
-| **CPU** | CPU allocation in millicores |
-| **Memory** | Memory allocation in MiB |
-| **Public Key** | SSH public key (or "Not set") |
+--- 
 
-![Specification](img/devpods/devpod_specification.png)
+### SSH based Access
+
+Copy the second command and paste it on your terminal to access the pod via SSH. 
 
 ---
 
-## Stats Panel
+## Delete Pod
 
-Provides SSH connection details:
+To delete a pod, users should click on the ellipses on the far right of the selected pod and select delete.
 
-| Field | Description |
-|-------|-------------|
-| **Profile Name** | Compute profile identifier |
-| **Create Private Key File** | View, copy, or download the auto-generated SSH private key |
-| **SSH Command** | Pre-built SSH command for immediate connection |
+![Delete](img/devpods/delete_pod.png)
 
-### Connecting via SSH
-
-```bash
-ssh -i <devpod-name>-ssh.key ubuntu@<ip-address> -p <port>
-```
-
-Set correct permissions before connecting:
-
-```bash
-chmod 600 <devpod-name>-ssh.key
-ssh -i <devpod-name>-ssh.key ubuntu@<ip-address> -p <port>
-```
-
-![Stats Panel](img/devpods/devpod_stats.png)
-
----
-
-## Re-publish DevPod
-
-Click **Re-publish** to re-apply the DevPod configuration or recover from a failed state.
-
----
-
-## Delete DevPod
-
-Click the **delete icon** (red trash bin) in the Actions column to delete a DevPod.
-
-!!! warning
-    Deleting a DevPod is permanent. Ensure you have saved any important work before deleting.
+!!! info
+    Once deletion has been initiated, it cannot be stopped or reversed. Users can create a new pod if required.
 
 ---

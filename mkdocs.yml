@@ -137,7 +137,6 @@ nav:
   - Workspaces: workspace.md
   - Compute:
     - DevPods:
-      - 'Overview': 'compute/devpods/overview.md'
       - 'Configure & Use': 'compute/devpods/config_devpods.md'
     - GPU Virtual Machines:
       - 'Overview': 'compute/gpu-vm/overview.md'
@@ -145,8 +144,6 @@ nav:
     - Baremetal:
       - 'Overview': 'compute/baremetal/overview.md'
       - 'Configure & Use': 'compute/baremetal/config_baremetal.md'
-    - Serverless Pods:
-      - 'Configure & Use': 'compute/pods/config_pods.md'
     - Managed Kubernetes:
       - 'Overview': 'compute/k8s/overview.md'
       - 'Configure & Use': 'compute/k8s/config_k8s.md'
