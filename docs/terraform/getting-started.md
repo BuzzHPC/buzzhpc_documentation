@@ -33,13 +33,13 @@ export BUZZHPC_API_KEY="your-api-key-here"
 
 ## Provider Configuration
 
-Add the provider block to your Terraform configuration:
+The provider is published on the [Terraform Registry](https://registry.terraform.io/providers/BuzzHPC/buzzhpc/latest). Add the provider block to your Terraform configuration:
 
 ```hcl
 terraform {
   required_providers {
     buzzhpc = {
-      source  = "buzzhpc/buzzhpc"
+      source  = "BuzzHPC/buzzhpc"
       version = "~> 0.1"
     }
   }
@@ -48,7 +48,7 @@ terraform {
 provider "buzzhpc" {}
 ```
 
-Then initialise the working directory:
+Then initialise the working directory — Terraform will automatically download the provider:
 
 ```bash
 terraform init
@@ -83,7 +83,7 @@ Your workspace name matches the workspace you have already created in the BuzzHP
 ```hcl
 terraform {
   required_providers {
-    buzzhpc = { source = "buzzhpc/buzzhpc" }
+    buzzhpc = { source = "BuzzHPC/buzzhpc" }
   }
 }
 

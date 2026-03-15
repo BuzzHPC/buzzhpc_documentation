@@ -86,7 +86,7 @@ resource "buzzhpc_service" "notebook" {
 terraform {
   required_providers {
     buzzhpc = {
-      source  = "buzzhpc/buzzhpc"
+      source  = "BuzzHPC/buzzhpc"
       version = "~> 0.1"
     }
   }

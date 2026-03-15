@@ -101,7 +101,7 @@ resource "buzzhpc_service" "llm_inference" {
 terraform {
   required_providers {
     buzzhpc = {
-      source  = "buzzhpc/buzzhpc"
+      source  = "BuzzHPC/buzzhpc"
       version = "~> 0.1"
     }
   }

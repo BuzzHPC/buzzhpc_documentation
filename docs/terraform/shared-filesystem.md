@@ -73,7 +73,7 @@ resource "buzzhpc_service" "shared_fs" {
 terraform {
   required_providers {
     buzzhpc = {
-      source  = "buzzhpc/buzzhpc"
+      source  = "BuzzHPC/buzzhpc"
       version = "~> 0.1"
     }
   }

@@ -79,7 +79,7 @@ resource "buzzhpc_compute_instance" "cluster" {
 terraform {
   required_providers {
     buzzhpc = {
-      source  = "buzzhpc/buzzhpc"
+      source  = "BuzzHPC/buzzhpc"
       version = "~> 0.1"
     }
   }
