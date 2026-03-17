@@ -62,6 +62,7 @@ The pod is created and **deployed automatically**. Pass `--no-deploy` to create 
 | `--gpu-count` | Number of GPUs | `1` |
 | `--sku` | SKU: `managed-developer-pods-v2-ca-qc-2` (H200) or `managed-developer-pods-v2` (A40/H100) | `managed-developer-pods-v2-ca-qc-2` |
 | `--no-deploy` | Create resource without deploying | `false` |
+| `--wait` | Wait until the pod is ready after deploying | `false` |
 
 **Examples:**
 
@@ -74,6 +75,9 @@ buzz pod create --name my-pod --node-type H100 --gpu-count 2
 
 # Create without deploying
 buzz devpod create --name my-pod --no-deploy
+
+# Create and wait until ready
+buzz devpod create --name my-pod --wait
 ```
 
 ---
@@ -84,7 +88,7 @@ buzz devpod create --name my-pod --no-deploy
 buzz devpod delete <name>
 ```
 
-Prompts for confirmation before deleting. Pass `--force` or `-f` to skip.
+Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
 
 ```bash
 buzz devpod delete my-pod
