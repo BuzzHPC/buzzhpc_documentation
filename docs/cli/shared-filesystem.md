@@ -69,6 +69,7 @@ The filesystem is created and **deployed automatically**. Pass `--no-deploy` to 
 | `-n, --name` | Name of the filesystem **(required)** | — |
 | `-s, --size` | Volume size in GB | `50` |
 | `--no-deploy` | Create without deploying | `false` |
+| `--wait` | Wait until the filesystem is ready after deploying | `false` |
 
 **Examples:**
 
@@ -84,6 +85,9 @@ buzz fs create --name model-weights --size 200
 
 # Create without deploying
 buzz shared-fs create --name my-fs --no-deploy
+
+# Create and wait until ready
+buzz shared-fs create --name my-fs --wait
 ```
 
 ---
@@ -94,7 +98,7 @@ buzz shared-fs create --name my-fs --no-deploy
 buzz shared-fs delete <name>
 ```
 
-Prompts for confirmation before deleting. Pass `--force` or `-f` to skip.
+Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
 
 ```bash
 buzz nfs delete my-fs
