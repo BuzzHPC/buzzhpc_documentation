@@ -79,6 +79,7 @@ The VM is created and **deployed automatically**. Pass `--no-deploy` to create w
 | `--gpu-count` | Number of GPUs | `1` |
 | `--sku` | Compute profile SKU | `no-gpu-vm` |
 | `--no-deploy` | Create without deploying | `false` |
+| `--wait` | Wait until the VM is ready after deploying | `false` |
 
 **Examples:**
 
@@ -91,6 +92,9 @@ buzz gpu-vm create --name my-vm --node-type H200 --gpu-count 2
 
 # Create without deploying
 buzz vm create --name my-vm --no-deploy
+
+# Create and wait until ready
+buzz vm create --name my-vm --wait
 ```
 
 ---
@@ -101,7 +105,7 @@ buzz vm create --name my-vm --no-deploy
 buzz vm delete <name>
 ```
 
-Prompts for confirmation before deleting. Pass `--force` or `-f` to skip.
+Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
 
 ```bash
 buzz vm delete my-vm
