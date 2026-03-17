@@ -1,186 +1,114 @@
----
-title: CLI – Getting Started
-description: Install and configure the buzz CLI to manage BuzzHPC resources from the command line
-tags:
-  - CLI
-  - Command Line
-  - buzz
----
+# Getting Started with the Buzz CLI
 
-Users can use the `buzz` CLI to create, manage, and delete BuzzHPC resources directly from the command line — without using the web console. All resource types are supported: Developer Pods, GPU Virtual Machines, Managed Kubernetes clusters, Jupyter Notebooks, LLM Inference endpoints, Object Storage buckets, and Shared Filesystems.
-
----
+The `buzz` CLI lets you create and manage BuzzHPC cloud resources directly from your terminal — no browser required.
 
 ## Installation
 
-=== "macOS"
-
-    **One-line installer (recommended):**
-
+=== "macOS (Apple Silicon)"
     ```bash
-    curl -fsSL https://raw.githubusercontent.com/BuzzHPC/buzz-cli/main/install.sh | sh
+    curl -sSL https://github.com/BuzzHPC/buzz-cli/releases/latest/download/buzz-cli_Darwin_arm64.tar.gz | tar xz
+    sudo mv buzz-cli /usr/local/bin/buzz
     ```
 
-    **Manual download:**
-
-    Download the appropriate archive from the [latest release](https://github.com/BuzzHPC/buzz-cli/releases/latest):
-
-    | Chip | File |
-    |---|---|
-    | Apple Silicon (M1/M2/M3/M4) | `buzz_*_darwin_arm64.tar.gz` |
-    | Intel | `buzz_*_darwin_amd64.tar.gz` |
-
+=== "macOS (Intel)"
     ```bash
-    tar -xzf buzz_*_darwin_*.tar.gz
-    sudo mv buzz /usr/local/bin/buzz
+    curl -sSL https://github.com/BuzzHPC/buzz-cli/releases/latest/download/buzz-cli_Darwin_amd64.tar.gz | tar xz
+    sudo mv buzz-cli /usr/local/bin/buzz
     ```
 
-=== "Linux"
-
-    **One-line installer (recommended):**
-
+=== "Linux (x86_64)"
     ```bash
-    curl -fsSL https://raw.githubusercontent.com/BuzzHPC/buzz-cli/main/install.sh | sh
+    curl -sSL https://github.com/BuzzHPC/buzz-cli/releases/latest/download/buzz-cli_Linux_amd64.tar.gz | tar xz
+    sudo mv buzz-cli /usr/local/bin/buzz
     ```
 
-    **Manual download:**
-
-    Download the appropriate archive from the [latest release](https://github.com/BuzzHPC/buzz-cli/releases/latest):
-
-    | Architecture | File |
-    |---|---|
-    | x86_64 | `buzz_*_linux_amd64.tar.gz` |
-    | ARM64 | `buzz_*_linux_arm64.tar.gz` |
-
+=== "Linux (ARM64)"
     ```bash
-    tar -xzf buzz_*_linux_*.tar.gz
-    sudo mv buzz /usr/local/bin/buzz
+    curl -sSL https://github.com/BuzzHPC/buzz-cli/releases/latest/download/buzz-cli_Linux_arm64.tar.gz | tar xz
+    sudo mv buzz-cli /usr/local/bin/buzz
     ```
 
 === "Windows"
+    Download the latest `buzz-cli_Windows_amd64.zip` from [GitHub Releases](https://github.com/BuzzHPC/buzz-cli/releases/latest), extract it, and add `buzz-cli.exe` to your PATH (rename to `buzz.exe` for convenience).
 
-    Download `buzz_*_windows_amd64.zip` from the [latest release](https://github.com/BuzzHPC/buzz-cli/releases/latest), extract it, and add `buzz.exe` to your PATH.
-
----
-
-## Verify Installation
-
-```bash
-buzz --version
-```
-
----
-
-## Authentication
-
-Set your API key as an environment variable — it will be used automatically for every command:
-
-```bash
-export BUZZHPC_API_KEY=your-api-key
-```
-
-!!! info
-    Your API key can be found in the BuzzHPC console under Administration. Never share or commit your API key to source control.
-
-Alternatively, pass the key directly on any command:
-
-```bash
-buzz --api-key your-api-key vm list
-```
-
----
+=== "Install Script"
+    ```bash
+    curl -sSL https://raw.githubusercontent.com/BuzzHPC/buzz-cli/main/install.sh | bash
+    ```
 
 ## Configuration
 
-| Environment Variable | Description |
-|---|---|
-| `BUZZHPC_API_KEY` | Your BuzzHPC API key **(required)** |
-| `BUZZHPC_PROJECT` | Default project name (auto-detected if not set) |
-| `BUZZHPC_WORKSPACE` | Default workspace (optional — defaults to all workspaces) |
-| `BUZZHPC_BASE_URL` | Override the API base URL (advanced) |
+### Interactive Setup
 
----
-
-## Configuration File
-
-Instead of setting environment variables every time, save your settings to `~/.buzzhpc/config` using the interactive configure command:
+Run `buzz configure` to interactively set your API key and default project:
 
 ```bash
 buzz configure
 ```
 
-This prompts for your API key, project, and base URL, then saves them to `~/.buzzhpc/config`:
+This creates `~/.buzzhpc/config` with your settings.
 
-```yaml
-api_key: your-api-key
-project: my-project
-base_url: ""
+### Environment Variables
+
+```bash
+export BUZZHPC_API_KEY=your-api-key
+export BUZZHPC_PROJECT=your-project-name
+export BUZZHPC_WORKSPACE=your-workspace-name   # optional
 ```
 
-Settings are loaded automatically on every command. Priority order (highest wins): flags > environment variables > config file.
+### Config File
 
----
+`~/.buzzhpc/config`:
+```yaml
+api_key: your-api-key
+project: your-project-name
+workspace: your-workspace-name
+```
+
+### Priority Order
+
+Flags > Environment Variables > Config File
+
+## Authentication
+
+Get your API key from the [BuzzHPC Console](https://console.buzzhpc.ai) under your account settings.
+
+```bash
+buzz --api-key YOUR_KEY devpod list
+```
+
+## Quick Start
+
+```bash
+# Configure once
+buzz configure
+
+# Create a DevPod with 1x H200 GPU
+buzz devpod create --name my-pod --wait
+
+# List all resources
+buzz devpod list
+buzz vm list
+buzz k8s list
+
+# Get detailed info
+buzz devpod get my-pod
+```
 
 ## Global Flags
 
-These flags are available on every command:
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--api-key` | | BuzzHPC API key |
+| `--project` | `-p` | Project name |
+| `--workspace` | `-w` | Workspace name |
+| `--base-url` | | API base URL (advanced) |
 
-```
---api-key string     BuzzHPC API key (or set BUZZHPC_API_KEY)
---base-url string    API base URL (or set BUZZHPC_BASE_URL)
--p, --project string     Project name (or set BUZZHPC_PROJECT)
--w, --workspace string   Workspace name (or set BUZZHPC_WORKSPACE)
--h, --help               Help for any command
--v, --version            Print CLI version
-```
+## Non-Interactive Mode
 
----
-
-## Available Commands
-
-| Command | Aliases | Description |
-|---|---|---|
-| `buzz devpod` | `pod`, `pods`, `devpods` | Manage Developer Pods |
-| `buzz vm` | `gpu-vm`, `virtual-machine` | Manage GPU Virtual Machines |
-| `buzz kubernetes` | `k8s`, `mks`, `cluster` | Manage Managed Kubernetes clusters |
-| `buzz notebook` | `nb`, `jupyter` | Manage Jupyter Notebooks |
-| `buzz inference` | `llm`, `vllm`, `ai` | Manage LLM Inference endpoints |
-| `buzz object-storage` | `s3`, `obs`, `bucket` | Manage Object Storage buckets |
-| `buzz shared-fs` | `nfs`, `fs`, `shared-filesystem` | Manage Shared Filesystems |
-| `buzz configure` | — | Save API key and settings to ~/.buzzhpc/config |
-
-Each command supports four subcommands: `list`, `get`, `create`, `delete`.
-
-All create commands support:
-
-- `--wait` — poll until the resource is fully ready (or failed) before returning
-- `--no-deploy` — create the resource without deploying it
-
----
-
-## Workspaces
-
-By default, `list` commands return resources from **all workspaces** the API key has access to. Use `-w` to filter to a specific workspace:
+The CLI detects when running in CI/CD or scripts (no TTY) and will fail immediately instead of prompting, so pipelines never hang.
 
 ```bash
-buzz vm list                   # all workspaces
-buzz vm list -w my-workspace    # specific workspace
+# Always works in CI
+BUZZHPC_API_KEY=... BUZZHPC_PROJECT=... buzz devpod create --name ci-pod --no-deploy
 ```
-
-Create, get, and delete commands will prompt you to specify a workspace if you have more than one. Pass `-w` to skip the prompt:
-
-```bash
-buzz devpod create --name my-pod -w my-workspace
-```
-
----
-
-## Next Steps
-
-- [Developer Pods](devpods.md)
-- [GPU Virtual Machines](gpu-vm.md)
-- [Managed Kubernetes](kubernetes.md)
-- [Jupyter Notebooks](notebooks.md)
-- [LLM Inference](inference.md)
-- [Object Storage](object-storage.md)
-- [Shared Filesystem](shared-filesystem.md)

@@ -1,109 +1,69 @@
----
-title: CLI – Shared Filesystem
-description: Create and manage Shared NFS Filesystems from the command line using the buzz CLI
-tags:
-  - CLI
-  - Shared Filesystem
-  - NFS
-  - Command Line
----
+# Shared Filesystem (CLI)
 
-Users can use the `buzz` CLI to create, list, inspect, and delete Shared Filesystems (NFS) without using the web console. Shared Filesystems can be mounted across multiple pods and VMs simultaneously.
+Manage NFS-backed Shared Filesystems using the `buzz shared-fs` command.
 
-**Aliases:** `nfs`, `fs`, `shared-filesystem`
+**Aliases:** `shared-fs`, `nfs`, `shared-filesystem`, `fs`
 
----
+## Commands
 
-## List Filesystems
+| Command | Description |
+|---------|-------------|
+| `buzz shared-fs create` | Create and deploy a Shared Filesystem |
+| `buzz shared-fs list` | List all Shared Filesystems |
+| `buzz shared-fs get <name>` | Get filesystem details |
+| `buzz shared-fs delete <name>` | Delete a Shared Filesystem |
 
-```bash
-buzz shared-fs list
-```
-
-Returns all Shared Filesystems across all accessible workspaces.
+## Create
 
 ```bash
-buzz fs list -w my-workspace
-```
-
-Filter by a specific workspace.
-
----
-
-## Get Filesystem Details
-
-```bash
-buzz shared-fs get <name>
-```
-
-Returns full details including status, size, server IP, mount path, and a ready-to-use mount command.
-
-**Example:**
-
-```bash
-buzz fs get my-fs
-```
-
-Once deployed, mount the filesystem on any Linux host:
-
-```bash
-mount -t nfs <server-ip>:<mount-path> /mnt
-```
-
-The exact mount command is shown in the output of `buzz fs get <name>`.
-
----
-
-## Create a Filesystem
-
-```bash
-buzz shared-fs create --name <name> [flags]
-```
-
-The filesystem is created and **deployed automatically**. Pass `--no-deploy` to create without deploying.
-
-**Flags:**
-
-| Flag | Description | Default |
-|---|---|---|
-| `-n, --name` | Name of the filesystem **(required)** | — |
-| `-s, --size` | Volume size in GB | `50` |
-| `--no-deploy` | Create without deploying | `false` |
-| `--wait` | Wait until the filesystem is ready after deploying | `false` |
-
-**Examples:**
-
-```bash
-# Create a 50 GB filesystem (default)
-buzz shared-fs create --name my-fs
-
-# Create a 500 GB dataset volume
+buzz shared-fs create --name my-fs --size 50
 buzz nfs create --name datasets --size 500
-
-# Create a large model weights volume
 buzz fs create --name model-weights --size 200
-
-# Create without deploying
 buzz shared-fs create --name my-fs --no-deploy
-
-# Create and wait until ready
 buzz shared-fs create --name my-fs --wait
 ```
 
----
+### Flags
 
-## Delete a Filesystem
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--name`, `-n` | required | Filesystem name |
+| `--size`, `-s` | `50` | Volume size in GB |
+| `--no-deploy` | | Create without deploying |
+| `--wait` | | Wait until filesystem is ready |
+
+## List
 
 ```bash
-buzz shared-fs delete <name>
+buzz shared-fs list
+buzz nfs ls
 ```
 
-Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
+## Get
 
 ```bash
-buzz nfs delete my-fs
-buzz fs delete my-fs --force
+buzz shared-fs get my-fs
+buzz fs describe my-fs
 ```
 
-!!! info
-    Deleting a shared filesystem is permanent. Ensure all pods and VMs have unmounted the filesystem before deleting to avoid errors.
+Sample output:
+
+```
+FIELD          VALUE
+Name           my-fs
+Project        my-project
+Workspace      default
+Status         success
+SKU            shared-filesystem
+Size (GB)      500
+Server IP      10.0.2.10
+Mount Path     /exports/my-fs
+Mount Command  mount -t nfs 10.0.2.10:/exports/my-fs /mnt
+```
+
+## Delete
+
+```bash
+buzz shared-fs delete my-fs
+buzz nfs delete my-fs --force   # skip confirmation
+```

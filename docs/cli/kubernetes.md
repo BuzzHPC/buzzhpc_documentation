@@ -1,106 +1,117 @@
----
-title: CLI – Managed Kubernetes
-description: Create and manage Managed Kubernetes clusters from the command line using the buzz CLI
-tags:
-  - CLI
-  - Kubernetes
-  - MKS
-  - Command Line
----
+# Managed Kubernetes (CLI)
 
-Users can use the `buzz` CLI to create, list, inspect, and delete Managed Kubernetes clusters without using the web console.
+Manage Managed Kubernetes (MKS) clusters using the `buzz k8s` command.
 
-**Aliases:** `k8s`, `mks`, `cluster`
+**Aliases:** `kubernetes`, `k8s`, `mks`, `cluster`
 
-!!! info
-    Managed Kubernetes clusters are provisioned on full GPU nodes. You specify the node type and number of nodes — not individual GPU count.
+## Commands
 
----
+| Command | Description |
+|---------|-------------|
+| `buzz k8s create` | Create and deploy a cluster |
+| `buzz k8s list` | List all clusters |
+| `buzz k8s get <name>` | Get cluster details |
+| `buzz k8s delete <name>` | Delete a cluster |
+| `buzz k8s tags <name>` | List tags on a cluster |
+| `buzz k8s tag <name> key=value` | Apply or remove a tag |
 
-## List Clusters
+## Create
+
+```bash
+buzz k8s create --name my-cluster
+buzz k8s create --name my-cluster --node-type A40 --nodes 2
+buzz k8s create --name my-cluster --node-type H200 --nodes 4
+buzz k8s create --name my-cluster --wait
+buzz k8s create --name my-cluster --no-deploy
+```
+
+### Flags
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--name`, `-n` | required | Cluster name |
+| `--sku` | `mks-oneclick` | SKU: `mks-oneclick`, `mks-k8s-ca-qc-2`, `mks-k8s` |
+| `--node-type` | `H200` | GPU node type: `H200`, `A40`, `H100`, `CPU` |
+| `--nodes` | `1` | Number of nodes |
+| `--no-deploy` | | Create without deploying |
+| `--wait` | | Wait until cluster is ready |
+
+## List
 
 ```bash
 buzz k8s list
+buzz mks ls
 ```
 
-Returns all Kubernetes clusters across all accessible workspaces.
-
-```bash
-buzz k8s list -w my-workspace
-```
-
-Filter by a specific workspace.
-
----
-
-## Get Cluster Details
-
-```bash
-buzz k8s get <name>
-```
-
-Returns full cluster details including status, SKU, GPU node type, node count, cluster name, and kubeconfig URL.
-
-**Example:**
+## Get
 
 ```bash
 buzz k8s get my-cluster
+buzz k8s describe my-cluster
 ```
 
----
+Sample output:
 
-## Create a Cluster
+```
+FIELD           VALUE
+Name            my-cluster
+Project         my-project
+Workspace       default
+Status          success
+SKU             mks-oneclick
+GPU Type        H200
+Nodes           2
+Cluster Name    my-cluster-abc123
+Kubeconfig URL  https://...
+Node List       node1,node2
+```
+
+## Delete
 
 ```bash
-buzz kubernetes create --name <name> [flags]
+buzz k8s delete my-cluster
+buzz k8s delete my-cluster --force   # skip confirmation
 ```
 
-The cluster is created and **deployed automatically**. Pass `--no-deploy` to create without deploying.
+The CLI shows the current status and workspace before prompting for confirmation. Type `yes` or `y` to proceed.
 
-**Flags:**
+## Tags
 
-| Flag | Description | Default |
-|---|---|---|
-| `-n, --name` | Name of the cluster **(required)** | — |
-| `--node-type` | GPU node type: `H200`, `A40`, `H100`, `CPU` | `H200` |
-| `--nodes` | Number of nodes | `1` |
-| `--sku` | SKU: `mks-oneclick` (default), `mks-k8s-ca-qc-2`, `mks-k8s` | `mks-oneclick` |
-| `--no-deploy` | Create without deploying | `false` |
-| `--wait` | Wait until the cluster is ready after deploying | `false` |
-
-**Examples:**
+### List Tags
 
 ```bash
-# Create a single-node H200 cluster
-buzz k8s create --name my-cluster
-
-# Create a 2-node A40 cluster
-buzz k8s create --name my-cluster --node-type A40 --nodes 2
-
-# Create a 4-node H200 cluster
-buzz k8s create --name prod-cluster --node-type H200 --nodes 4
-
-# Create without deploying
-buzz k8s create --name my-cluster --no-deploy
-
-# Create and wait until ready
-buzz k8s create --name my-cluster --wait
+buzz k8s tags my-cluster
 ```
 
----
+```
+KEY     VALUE        TYPE   ASSOCIATION
+env     production   k8s    my-cluster-env-production-assoc
+team    ml           cost   my-cluster-team-ml-assoc
+```
 
-## Delete a Cluster
+### Apply a Tag
 
 ```bash
-buzz k8s delete <name>
+# Apply a Kubernetes label tag (default type: k8s)
+buzz k8s tag my-cluster env=production
+
+# Apply a cost allocation tag
+buzz k8s tag my-cluster team=ml --type cost
+
+# Apply a namespace label tag
+buzz k8s tag my-cluster app=inference --type namespacelabel
 ```
 
-Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
+### Remove a Tag
 
 ```bash
-buzz cluster delete my-cluster
-buzz k8s delete my-cluster --force
+buzz k8s tag my-cluster env=production --remove
 ```
 
-!!! info
-    Deleting a cluster is permanent and will remove all workloads running on it.
+### Tag Types
+
+| Type | Description |
+|------|-------------|
+| `k8s` | Kubernetes labels (default) |
+| `cost` | Cost allocation / billing tags |
+| `namespacelabel` | Namespace-level labels |

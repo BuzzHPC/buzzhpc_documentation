@@ -1,99 +1,73 @@
----
-title: CLI – Developer Pods
-description: Create and manage Developer Pods from the command line using the buzz CLI
-tags:
-  - CLI
-  - DevPods
-  - Command Line
----
+# Developer Pods (CLI)
 
-Users can use the `buzz` CLI to create, list, inspect, and delete Developer Pods without using the web console.
+Manage GPU-backed Developer Pods using the `buzz devpod` command.
 
-**Aliases:** `pod`, `pods`, `devpods`
+**Aliases:** `devpod`, `pod`, `pods`, `devpods`
 
----
+## Commands
 
-## List Pods
+| Command | Description |
+|---------|-------------|
+| `buzz devpod create` | Create and deploy a DevPod |
+| `buzz devpod list` | List all DevPods |
+| `buzz devpod get <name>` | Get DevPod details |
+| `buzz devpod delete <name>` | Delete a DevPod |
+
+## Create
+
+```bash
+buzz devpod create --name my-pod
+buzz pod create --name my-pod --node-type H100 --gpu-count 2
+buzz devpod create --name my-pod --wait
+buzz devpod create --name my-pod --no-deploy
+```
+
+### Flags
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--name`, `-n` | required | DevPod name |
+| `--sku` | `managed-developer-pods-v2-ca-qc-2` | SKU (H200 region default) |
+| `--node-type` | `H200` | GPU node type |
+| `--gpu-count` | `1` | Number of GPUs |
+| `--no-deploy` | | Create without deploying |
+| `--wait` | | Wait until DevPod is ready |
+
+## List
 
 ```bash
 buzz devpod list
+buzz pod ls
 ```
 
-Returns all Developer Pods across all accessible workspaces.
-
-```bash
-buzz devpod list -w my-workspace
-```
-
-Filter by a specific workspace.
-
----
-
-## Get Pod Details
-
-```bash
-buzz devpod get <name>
-```
-
-Returns full details for a pod including status, GPU type, GPU count, pod image, SSH command, and connection credentials.
-
-**Example:**
+## Get
 
 ```bash
 buzz devpod get my-pod
+buzz devpod describe my-pod
 ```
 
----
+Sample output:
 
-## Create a Pod
-
-```bash
-buzz devpod create --name <name> [flags]
+```
+FIELD        VALUE
+Name         my-pod
+Project      my-project
+Workspace    default
+Status       success
+GPU Count    1
+GPU Type     H200
+Pod Image    pytorch:2.3
+SSH Command  ssh -i ~/.ssh/id_buzz user@10.0.1.45 -p 22
 ```
 
-The pod is created and **deployed automatically**. Pass `--no-deploy` to create without deploying.
+If an SSH private key is available, the CLI will print the command to save it.
 
-**Flags:**
-
-| Flag | Description | Default |
-|---|---|---|
-| `-n, --name` | Name of the DevPod **(required)** | — |
-| `--node-type` | GPU node type | `H200` |
-| `--gpu-count` | Number of GPUs | `1` |
-| `--sku` | SKU: `managed-developer-pods-v2-ca-qc-2` (H200) or `managed-developer-pods-v2` (A40/H100) | `managed-developer-pods-v2-ca-qc-2` |
-| `--no-deploy` | Create resource without deploying | `false` |
-| `--wait` | Wait until the pod is ready after deploying | `false` |
-
-**Examples:**
-
-```bash
-# Create a pod with defaults (1x H200 GPU)
-buzz devpod create --name my-pod
-
-# Create a pod with 2x H100 GPUs
-buzz pod create --name my-pod --node-type H100 --gpu-count 2
-
-# Create without deploying
-buzz devpod create --name my-pod --no-deploy
-
-# Create and wait until ready
-buzz devpod create --name my-pod --wait
-```
-
----
-
-## Delete a Pod
-
-```bash
-buzz devpod delete <name>
-```
-
-Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
+## Delete
 
 ```bash
 buzz devpod delete my-pod
-buzz devpod delete my-pod --force
+buzz devpod delete my-pod --force   # skip confirmation
 ```
 
-!!! info
-    Deleting a pod is permanent and cannot be undone.
+Before deleting, the CLI shows the pod's current status, GPU configuration, and workspace.

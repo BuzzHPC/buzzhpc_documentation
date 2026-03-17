@@ -1,116 +1,81 @@
----
-title: CLI – GPU Virtual Machines
-description: Create and manage GPU Virtual Machines from the command line using the buzz CLI
-tags:
-  - CLI
-  - GPU VM
-  - Virtual Machine
-  - Command Line
----
+# GPU Virtual Machines (CLI)
 
-Users can use the `buzz` CLI to create, list, inspect, and delete GPU Virtual Machines without using the web console.
+Manage GPU Virtual Machines using the `buzz vm` command.
 
-**Aliases:** `gpu-vm`, `virtual-machine`
+**Aliases:** `vm`, `gpu-vm`, `virtual-machine`
 
----
+## Commands
 
-## List VMs
+| Command | Description |
+|---------|-------------|
+| `buzz vm create` | Create and deploy a GPU VM |
+| `buzz vm list` | List all GPU VMs |
+| `buzz vm get <name>` | Get VM details |
+| `buzz vm delete <name>` | Delete a GPU VM |
 
-```bash
-buzz vm list
-```
-
-Returns all GPU VMs across all accessible workspaces.
+## Create
 
 ```bash
-buzz vm list -w my-workspace
-```
-
-Filter by a specific workspace.
-
----
-
-## Get VM Details
-
-```bash
-buzz vm get <name>
-```
-
-Returns full VM details including:
-
-| Field | Description |
-|---|---|
-| SKU | Compute profile name |
-| GPU Model | GPU hardware model |
-| GPU Count | Number of GPUs |
-| CPU Count | Number of vCPUs |
-| Memory | RAM in GB |
-| Disk | Storage in GB |
-| Datacenter | Region |
-| OS | Operating system |
-| Username | SSH login username |
-| Password | SSH login password |
-| Public IP | External IP address |
-| Private IP | Internal network IP |
-| SSH Port | SSH port |
-
-**Example:**
-
-```bash
-buzz vm get my-vm
-```
-
----
-
-## Create a VM
-
-```bash
-buzz vm create --name <name> [flags]
-```
-
-The VM is created and **deployed automatically**. Pass `--no-deploy` to create without deploying.
-
-**Flags:**
-
-| Flag | Description | Default |
-|---|---|---|
-| `-n, --name` | Name of the VM **(required)** | — |
-| `--node-type` | GPU node type: `H200`, `A40` | `H200` |
-| `--gpu-count` | Number of GPUs | `1` |
-| `--sku` | Compute profile SKU | `no-gpu-vm` |
-| `--no-deploy` | Create without deploying | `false` |
-| `--wait` | Wait until the VM is ready after deploying | `false` |
-
-**Examples:**
-
-```bash
-# Create a VM with defaults
 buzz vm create --name my-vm
-
-# Create a VM with 2x H200 GPUs
 buzz gpu-vm create --name my-vm --node-type H200 --gpu-count 2
-
-# Create without deploying
 buzz vm create --name my-vm --no-deploy
-
-# Create and wait until ready
 buzz vm create --name my-vm --wait
 ```
 
----
+### Flags
 
-## Delete a VM
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--name`, `-n` | required | VM name |
+| `--sku` | `no-gpu-vm` | SKU |
+| `--node-type` | `H200` | GPU node type: `H200` |
+| `--gpu-count` | `1` | Number of GPUs |
+| `--no-deploy` | | Create without deploying |
+| `--wait` | | Wait until VM is ready |
+
+## List
 
 ```bash
-buzz vm delete <name>
+buzz vm list
+buzz gpu-vm ls
 ```
 
-Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
+## Get
+
+```bash
+buzz vm get my-vm
+buzz vm describe my-vm
+```
+
+Sample output:
+
+```
+FIELD          VALUE
+Name           my-vm
+Project        my-project
+Workspace      default
+Status         success
+SKU            h200-1gpu-vm
+GPU Model      H200
+GPU Count      1
+CPU Count      16
+Memory         128 GB
+Disk (GB)      500
+Datacenter     ca-qc-2
+OS             Ubuntu 22.04
+Username       ubuntu
+Password       ••••••••
+Private IP     10.0.1.100
+Public IP      203.0.113.5
+SSH Port       22
+SSH Command    ssh ubuntu@203.0.113.5 -p 22
+```
+
+## Delete
 
 ```bash
 buzz vm delete my-vm
-buzz vm delete my-vm --force
+buzz vm delete my-vm --force   # skip confirmation
 ```
 
-!!! info
-    Deleting a VM is permanent. Any data stored on the VM that has not been backed up will be lost.
+The CLI shows the current VM status and workspace before prompting for confirmation.

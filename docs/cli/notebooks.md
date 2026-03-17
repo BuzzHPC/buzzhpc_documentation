@@ -1,106 +1,64 @@
----
-title: CLI – Jupyter Notebooks
-description: Create and manage Jupyter Notebooks from the command line using the buzz CLI
-tags:
-  - CLI
-  - Notebooks
-  - Jupyter
-  - Command Line
----
+# Jupyter Notebooks (CLI)
 
-Users can use the `buzz` CLI to create, list, inspect, and delete Jupyter Notebook instances without using the web console.
+Manage Jupyter Notebook services using the `buzz notebook` command.
 
-**Aliases:** `nb`, `jupyter`
+**Aliases:** `notebook`, `nb`, `jupyter`
 
-!!! info
-    Each notebook is automatically assigned a public URL at `https://<name>.notebook.buzzperformancecloud.com`. The notebook name becomes the URL subdomain.
+## Commands
 
----
+| Command | Description |
+|---------|-------------|
+| `buzz notebook create` | Create and deploy a Notebook |
+| `buzz notebook list` | List all Notebooks |
+| `buzz notebook get <name>` | Get Notebook details |
+| `buzz notebook delete <name>` | Delete a Notebook |
 
-## List Notebooks
+## Create
+
+```bash
+buzz notebook create --name my-notebook
+buzz nb create --name my-notebook --no-deploy
+buzz notebook create --name my-notebook --wait
+```
+
+### Flags
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--name`, `-n` | required | Notebook name |
+| `--sku` | | SKU override |
+| `--no-deploy` | | Create without deploying |
+| `--wait` | | Wait until Notebook is ready |
+
+## List
 
 ```bash
 buzz notebook list
+buzz nb ls
 ```
 
-Returns all Notebooks across all accessible workspaces, including their public URL.
+## Get
 
 ```bash
-buzz notebook list -w my-workspace
+buzz notebook get my-notebook
+buzz nb describe my-notebook
 ```
 
-Filter by a specific workspace.
+Sample output:
 
----
+```
+FIELD      VALUE
+Name       my-notebook
+Project    my-project
+Workspace  default
+Status     success
+SKU        jupyter-notebook
+URL        https://my-notebook.notebooks.buzzhpc.ai
+```
 
-## Get Notebook Details
+## Delete
 
 ```bash
-buzz notebook get <name>
-```
-
-Returns full details including status, SKU, GPU count, GPU type, container image, access URL, and authentication token.
-
-**Example:**
-
-```bash
-buzz notebook get my-nb
-```
-
----
-
-## Create a Notebook
-
-```bash
-buzz notebook create --name <name> [flags]
-```
-
-The notebook is created and **deployed automatically**. Pass `--no-deploy` to create without deploying.
-
-**Flags:**
-
-| Flag | Description | Default |
-|---|---|---|
-| `-n, --name` | Name of the notebook — also sets the URL subdomain **(required)** | — |
-| `--node-type` | GPU node type | `H200` |
-| `--gpu-count` | Number of GPUs | `1` |
-| `--image` | Jupyter container image | `jupyter/minimal-notebook:latest` |
-| `--sku` | SKU: `jupyter-notebook-v4-ca-qc-2` (H200) or `jupyter-notebook-v4` (A40/H100) | `jupyter-notebook-v4-ca-qc-2` |
-| `--no-deploy` | Create without deploying | `false` |
-| `--wait` | Wait until the notebook is ready after deploying | `false` |
-
-**Examples:**
-
-```bash
-# Create a notebook with defaults
-buzz notebook create --name my-nb
-
-# Create with 2x H100 GPUs and scipy image
-buzz jupyter create --name my-nb --node-type H100 --gpu-count 2 --image jupyter/scipy-notebook:latest
-
-# Create without deploying
-buzz notebook create --name my-nb --no-deploy
-
-# Create and wait until ready
-buzz notebook create --name my-nb --wait
-```
-
-After deployment, access your notebook at:
-```
-https://my-nb.notebook.buzzperformancecloud.com
-```
-
----
-
-## Delete a Notebook
-
-```bash
-buzz notebook delete <name>
-```
-
-Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
-
-```bash
-buzz nb delete my-nb
-buzz notebook delete my-nb --force
+buzz notebook delete my-notebook
+buzz nb delete my-notebook --force
 ```

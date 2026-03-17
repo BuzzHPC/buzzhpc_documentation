@@ -167,9 +167,9 @@ nav:
     - 'LLM Inference': 'terraform/llm-inference.md'
     - 'Object Storage': 'terraform/object-storage.md'
     - 'Shared Filesystem': 'terraform/shared-filesystem.md'
-  - CLI:
+  - CLI (buzz):
     - 'Getting Started': 'cli/getting-started.md'
-    - 'Developer Pods': 'cli/devpods.md'
+    - 'DevPods': 'cli/devpods.md'
     - 'GPU Virtual Machines': 'cli/gpu-vm.md'
     - 'Managed Kubernetes': 'cli/kubernetes.md'
     - 'Jupyter Notebooks': 'cli/notebooks.md'
