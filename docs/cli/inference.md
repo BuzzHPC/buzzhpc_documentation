@@ -67,6 +67,7 @@ The endpoint is created and **deployed automatically**. Pass `--no-deploy` to cr
 | `--extra-args` | Extra vLLM CLI arguments | — |
 | `--sku` | SKU: `inference-vllm-v1` (H200) or `inference-vllm-v1-h100` (A40/H100) | `inference-vllm-v1` |
 | `--no-deploy` | Create without deploying | `false` |
+| `--wait` | Wait until the endpoint is ready after deploying | `false` |
 
 **Examples:**
 
@@ -85,6 +86,9 @@ buzz llm create --name my-llm --model facebook/opt-125m --extra-args '--max-mode
 
 # Create without deploying
 buzz ai create --name my-llm --model facebook/opt-125m --no-deploy
+
+# Create and wait until ready
+buzz llm create --name my-llm --model facebook/opt-125m --wait
 ```
 
 !!! info
@@ -98,7 +102,7 @@ buzz ai create --name my-llm --model facebook/opt-125m --no-deploy
 buzz inference delete <name>
 ```
 
-Prompts for confirmation before deleting. Pass `--force` or `-f` to skip.
+Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
 
 ```bash
 buzz llm delete my-llm
