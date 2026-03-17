@@ -65,6 +65,7 @@ The bucket is created and **deployed automatically**. Pass `--no-deploy` to crea
 | `-s, --size` | Storage quota in GB | `10` |
 | `--sku` | SKU: `object-storage-vast-ca-qc-2` (CA-QC-2) or `object-storage-vast` (CA-QC-1) | `object-storage-vast-ca-qc-2` |
 | `--no-deploy` | Create without deploying | `false` |
+| `--wait` | Wait until the bucket is ready after deploying | `false` |
 
 **Examples:**
 
@@ -80,6 +81,9 @@ buzz bucket create --name datasets --sku object-storage-vast --size 500
 
 # Create without deploying
 buzz s3 create --name my-bucket --no-deploy
+
+# Create and wait until ready
+buzz s3 create --name my-bucket --wait
 ```
 
 ---
@@ -90,7 +94,7 @@ buzz s3 create --name my-bucket --no-deploy
 buzz object-storage delete <name>
 ```
 
-Prompts for confirmation before deleting. Pass `--force` or `-f` to skip.
+Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
 
 ```bash
 buzz s3 delete my-bucket
