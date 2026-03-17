@@ -101,6 +101,26 @@ buzz --api-key your-api-key vm list
 
 ---
 
+## Configuration File
+
+Instead of setting environment variables every time, save your settings to `~/.buzzhpc/config` using the interactive configure command:
+
+```bash
+buzz configure
+```
+
+This prompts for your API key, project, and base URL, then saves them to `~/.buzzhpc/config`:
+
+```yaml
+api_key: your-api-key
+project: my-project
+base_url: ""
+```
+
+Settings are loaded automatically on every command. Priority order (highest wins): flags > environment variables > config file.
+
+---
+
 ## Global Flags
 
 These flags are available on every command:
@@ -127,8 +147,14 @@ These flags are available on every command:
 | `buzz inference` | `llm`, `vllm`, `ai` | Manage LLM Inference endpoints |
 | `buzz object-storage` | `s3`, `obs`, `bucket` | Manage Object Storage buckets |
 | `buzz shared-fs` | `nfs`, `fs`, `shared-filesystem` | Manage Shared Filesystems |
+| `buzz configure` | — | Save API key and settings to ~/.buzzhpc/config |
 
 Each command supports four subcommands: `list`, `get`, `create`, `delete`.
+
+All create commands support:
+
+- `--wait` — poll until the resource is fully ready (or failed) before returning
+- `--no-deploy` — create the resource without deploying it
 
 ---
 
@@ -137,8 +163,8 @@ Each command supports four subcommands: `list`, `get`, `create`, `delete`.
 By default, `list` commands return resources from **all workspaces** the API key has access to. Use `-w` to filter to a specific workspace:
 
 ```bash
-buzz vm list                     # all workspaces
-buzz vm list -w my-workspace     # specific workspace
+buzz vm list                   # all workspaces
+buzz vm list -w my-workspace    # specific workspace
 ```
 
 Create, get, and delete commands will prompt you to specify a workspace if you have more than one. Pass `-w` to skip the prompt:
