@@ -12,8 +12,8 @@ Manage Managed Kubernetes (MKS) clusters using the `buzz k8s` command.
 | `buzz k8s list` | List all clusters |
 | `buzz k8s get <name>` | Get cluster details |
 | `buzz k8s delete <name>` | Delete a cluster |
-| `buzz k8s tags <name>` | List tags on a cluster |
-| `buzz k8s tag <name> key=value` | Apply or remove a tag |
+| `buzz k8s labels <name>` | List labels on a cluster |
+| `buzz k8s label <name> key=value` | Add or remove a label |
 
 ## Create
 
@@ -75,43 +75,32 @@ buzz k8s delete my-cluster --force   # skip confirmation
 
 The CLI shows the current status and workspace before prompting for confirmation. Type `yes` or `y` to proceed.
 
-## Tags
+## Labels
 
-### List Tags
+Labels are key/value pairs attached to a cluster. They appear in the console under the cluster's Labels tab and can be used for organization, cost allocation, and filtering.
 
-```bash
-buzz k8s tags my-cluster
-```
-
-```
-KEY     VALUE        TYPE   ASSOCIATION
-env     production   k8s    my-cluster-env-production-assoc
-team    ml           cost   my-cluster-team-ml-assoc
-```
-
-### Apply a Tag
+### List Labels
 
 ```bash
-# Apply a Kubernetes label tag (default type: k8s)
-buzz k8s tag my-cluster env=production
-
-# Apply a cost allocation tag
-buzz k8s tag my-cluster team=ml --type cost
-
-# Apply a namespace label tag
-buzz k8s tag my-cluster app=inference --type namespacelabel
+buzz k8s labels my-cluster
 ```
 
-### Remove a Tag
+```
+KEY     VALUE
+------  -----------
+env     production
+team    ml
+```
+
+### Add a Label
 
 ```bash
-buzz k8s tag my-cluster env=production --remove
+buzz k8s label my-cluster env=production
+buzz k8s label my-cluster team=ml
 ```
 
-### Tag Types
+### Remove a Label
 
-| Type | Description |
-|------|-------------|
-| `k8s` | Kubernetes labels (default) |
-| `cost` | Cost allocation / billing tags |
-| `namespacelabel` | Namespace-level labels |
+```bash
+buzz k8s label my-cluster env=production --remove
+```
