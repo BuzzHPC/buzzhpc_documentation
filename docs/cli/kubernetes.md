@@ -66,6 +66,7 @@ The cluster is created and **deployed automatically**. Pass `--no-deploy` to cre
 | `--nodes` | Number of nodes | `1` |
 | `--sku` | SKU: `mks-oneclick` (default), `mks-k8s-ca-qc-2`, `mks-k8s` | `mks-oneclick` |
 | `--no-deploy` | Create without deploying | `false` |
+| `--wait` | Wait until the cluster is ready after deploying | `false` |
 
 **Examples:**
 
@@ -81,6 +82,9 @@ buzz k8s create --name prod-cluster --node-type H200 --nodes 4
 
 # Create without deploying
 buzz k8s create --name my-cluster --no-deploy
+
+# Create and wait until ready
+buzz k8s create --name my-cluster --wait
 ```
 
 ---
@@ -91,7 +95,7 @@ buzz k8s create --name my-cluster --no-deploy
 buzz k8s delete <name>
 ```
 
-Prompts for confirmation before deleting. Pass `--force` or `-f` to skip.
+Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
 
 ```bash
 buzz cluster delete my-cluster
