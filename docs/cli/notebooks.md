@@ -67,6 +67,7 @@ The notebook is created and **deployed automatically**. Pass `--no-deploy` to cr
 | `--image` | Jupyter container image | `jupyter/minimal-notebook:latest` |
 | `--sku` | SKU: `jupyter-notebook-v4-ca-qc-2` (H200) or `jupyter-notebook-v4` (A40/H100) | `jupyter-notebook-v4-ca-qc-2` |
 | `--no-deploy` | Create without deploying | `false` |
+| `--wait` | Wait until the notebook is ready after deploying | `false` |
 
 **Examples:**
 
@@ -79,6 +80,9 @@ buzz jupyter create --name my-nb --node-type H100 --gpu-count 2 --image jupyter/
 
 # Create without deploying
 buzz notebook create --name my-nb --no-deploy
+
+# Create and wait until ready
+buzz notebook create --name my-nb --wait
 ```
 
 After deployment, access your notebook at:
@@ -94,7 +98,7 @@ https://my-nb.notebook.buzzperformancecloud.com
 buzz notebook delete <name>
 ```
 
-Prompts for confirmation before deleting. Pass `--force` or `-f` to skip.
+Before deleting, the CLI displays the current status and workspace and prompts for confirmation. Type `yes` or `y` to confirm. Pass `--force` or `-f` to skip.
 
 ```bash
 buzz nb delete my-nb
